@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Проверка безопасности</title>
-    <!-- Подключаем reCAPTCHA -->
+    <!-- Подключаем reCAPTCHA с ВАШИМ ключом -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         /* === СБРОС И БАЗОВЫЕ НАСТРОЙКИ === */
@@ -27,7 +27,7 @@
             background: linear-gradient(145deg, #0b0c1e 0%, #1a1f35 100%);
         }
 
-        /* === УЛУЧШЕННАЯ АНИМАЦИЯ ФОНА (ЧАСТИЦЫ) === */
+        /* === УЛУЧШЕННАЯ АНИМАЦИЯ ФОНА === */
         .particles {
             position: fixed;
             top: 0;
@@ -47,7 +47,6 @@
             box-shadow: 0 0 15px rgba(110, 87, 255, 0.3);
         }
 
-        /* Создаем множество частиц с разными параметрами */
         .particle:nth-child(1) { width: 150px; height: 150px; top: 10%; left: 5%; animation-duration: 25s; }
         .particle:nth-child(2) { width: 200px; height: 200px; top: 60%; right: 10%; animation-duration: 30s; background: linear-gradient(145deg, rgba(255, 87, 217, 0.15), rgba(255, 255, 255, 0.05)); }
         .particle:nth-child(3) { width: 80px; height: 80px; bottom: 20%; left: 20%; animation-duration: 15s; }
@@ -58,18 +57,11 @@
         .particle:nth-child(8) { width: 250px; height: 250px; bottom: -50px; left: -30px; animation-duration: 32s; opacity: 0.2; }
 
         @keyframes float {
-            0%, 100% {
-                transform: translate(0, 0) scale(1);
-            }
-            33% {
-                transform: translate(50px, -50px) scale(1.1);
-            }
-            66% {
-                transform: translate(-30px, 30px) scale(0.9);
-            }
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-30px, 30px) scale(0.9); }
         }
 
-        /* Сетка для глубины */
         .grid-overlay {
             position: fixed;
             top: 0;
@@ -83,7 +75,7 @@
             z-index: -1;
         }
 
-        /* === ОСНОВНОЙ КОНТЕЙНЕР (СОВРЕМЕННЫЙ ДИЗАЙН) === */
+        /* === ОСНОВНОЙ КОНТЕЙНЕР === */
         .container {
             background: rgba(10, 12, 28, 0.7);
             backdrop-filter: blur(12px);
@@ -132,7 +124,6 @@
             }
         }
 
-        /* Иконка щита для красоты */
         .shield-icon {
             font-size: 48px;
             margin-bottom: 20px;
@@ -182,7 +173,7 @@
             box-shadow: 0 0 30px rgba(110, 87, 255, 0.1);
         }
 
-        /* Стилизация reCAPTCHA (она сама по себе белая, но это нормально) */
+        /* Стилизация контейнера reCAPTCHA */
         .g-recaptcha {
             transform: scale(1);
             transform-origin: center;
@@ -211,7 +202,7 @@
             font-weight: 600;
         }
 
-        /* === ФУТЕР С ЗАЩИТОЙ === */
+        /* === ФУТЕР === */
         .footer {
             margin-top: 30px;
             font-size: 15px;
@@ -251,7 +242,7 @@
     </style>
 </head>
 <body>
-    <!-- === УЛУЧШЕННЫЙ АНИМАЦИОННЫЙ ФОН === -->
+    <!-- === ФОН === -->
     <div class="particles">
         <div class="particle"></div>
         <div class="particle"></div>
@@ -270,23 +261,18 @@
         <h1>Проверка безопасности</h1>
         <div class="subtitle">Подтвердите, что вы не робот, для доступа к сайту</div>
 
-        <!-- БЛОК С RECAPTCHA -->
+        <!-- БЛОК С RECAPTCHA - ВАШ SITE KEY -->
         <div class="captcha-container">
-            <!-- Google reCAPTCHA v2 (Invisible не подходит, нужна обычная) -->
+            <!-- Используем ВАШ site key из консоли Google -->
             <div class="g-recaptcha" data-sitekey="6Lds0mwsAAAAABz0aCWKUJWW7ABbKp-e03j3joNw" data-callback="onRecaptchaSuccess"></div>
             
             <div class="info-message">
-                <span>✓</span> Это защищает сайт от ботов
+                <span>✓</span> Нажмите на чекбокс для подтверждения
             </div>
         </div>
-
-        <!-- Скрытая форма для отправки (на случай если нужна) -->
-        <form id="recaptchaForm" method="POST" style="display: none;">
-            <input type="hidden" name="g-recaptcha-response" id="recaptchaResponse">
-        </form>
     </div>
 
-    <!-- === ФУТЕР С НАДПИСЬЮ === -->
+    <!-- === ФУТЕР === -->
     <div class="footer">
         <span>⚡ Защита by HDD-SS ⚡</span>
     </div>
@@ -294,16 +280,18 @@
     <script>
         // Функция, которая вызывается при успешном прохождении reCAPTCHA
         function onRecaptchaSuccess(token) {
-            // Показываем сообщение о успехе (опционально)
-            console.log('reCAPTCHA пройдена! Токен:', token);
+            console.log('✅ reCAPTCHA пройдена!', token);
             
-            // Перенаправляем на указанный сайт через 0.5 секунды
+            // Показываем уведомление пользователю (можно убрать если не нужно)
+            alert('Проверка пройдена! Перенаправляем...');
+            
+            // Перенаправляем на указанный сайт
             setTimeout(function() {
                 window.location.href = 'https://donnyworld.ru/';
             }, 500);
         }
 
-        // Дополнительная проверка на мобильных устройствах для масштабирования
+        // Адаптация масштаба reCAPTCHA для мобильных
         function handleRecaptchaScale() {
             const recaptcha = document.querySelector('.g-recaptcha');
             if (window.innerWidth <= 600) {
